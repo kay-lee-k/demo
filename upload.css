@@ -1,0 +1,126 @@
+.div,
+.div * {
+    box-sizing: border-box;
+}
+
+.div {
+    background: #f2f2f0;
+    height: 1024px;
+    position: relative;
+}
+
+.div2 {
+    position: absolute;
+    inset: 0;
+}
+
+.rectangle-2 {
+    background: #a67f68;
+    width: 300px;
+    height: 80px;
+    position: absolute;
+    left: 570px;
+    top: 795px;
+}
+
+.upload {
+    color: #ffffff;
+    text-align: center;
+    font-family: 'SpoqaHanSansNeo-Medium', sans-serif;
+    font-size: 25px;
+    font-weight: 500;
+    position: absolute;
+    left: 570px;
+    top: 817px;
+    width: 300px;
+    height: 36px;
+    line-height: 36px; /* 텍스트를 수직 가운데 정렬 */
+    cursor: pointer; /* 커서를 포인터로 변경 */
+}
+.div3 {
+    background: #d9d9d9;
+    width: 480px;
+    height: 480px;
+    position: absolute;
+    left: 480px;
+    top: 272px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* 넘치는 이미지 숨기기 */
+}
+
+.div3 img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+
+.header {
+    position: absolute;
+    inset: 0;
+}
+
+.ai-lookbook-editor {
+    color: #000000;
+    text-align: center;
+    font-family: 'SpoqaHanSansNeo-Bold', sans-serif;
+    font-size: 40px;
+    font-weight: 700;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 500px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.title-line {
+    margin-top: -1px;
+    border-style: solid;
+    border-color: #000000;
+    border-width: 1px 0 0 0;
+    width: 1440px;
+    height: 0px;
+    position: absolute;
+    left: 0px;
+    top: 100px;
+    transform-origin: 0 0;
+    transform: rotate(0deg) scale(1, 1);
+}
+
+.log-out {
+    color: #000000;
+    text-align: center;
+    font-family: 'SpoqaHanSansNeo-Bold', sans-serif;
+    font-size: 25px;
+    font-weight: 700;
+    text-decoration: underline;
+    position: absolute;
+    left: 1105px;
+    top: 0px;
+    width: 120px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.my-page {
+    color: #000000;
+    text-align: center;
+    font-family: 'SpoqaHanSansNeo-Bold', sans-serif;
+    font-size: 25px;
+    font-weight: 700;
+    text-decoration: underline;
+    position: absolute;
+    left: 1270px;
+    top: 0px;
+    width: 120px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

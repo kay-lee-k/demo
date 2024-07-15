@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Lookbook Editor</title>
+    <link rel="stylesheet" href="upload-fin.css">
+</head>
+<body>
+    <div class="div">
+        <div class="log-out">log out</div>
+        <div class="my-page">my page</div>
+        <div class="ai-lookbook-editor">AI Lookbook Editor</div>
+        <div class="title-line"></div>
+        <div class="div4" id="imageContainer"></div>
+        <div class="analysis-section">
+            <div class="color-info-section">
+                <h3>Color Palette:</h3>
+                <div class="color-palette" id="paletteBlocks"></div>
+            </div>
+            <div class="color-info-section">
+                <h3>Dominant Color:</h3>
+                <div id="dominantColorBlock" class="color-block"></div>
+            </div>
+            <div class="color-info-section">
+                <h3>Predicted Emotions:</h3>
+                <div class="predicted-emotions" id="predictedEmotions">
+                    <div id="emotionBlock1" class="color-block"></div>
+                    <div id="emotionLabel1"></div>
+                    <div id="emotionBlock2" class="color-block"></div>
+                    <div id="emotionLabel2"></div>
+                    <div id="emotionBlock3" class="color-block"></div>
+                    <div id="emotionLabel3"></div>
+                </div>
+            </div>
+        </div>
+        <div class="div3">분석 완료</div>
+        <div class="div2"><a href="merge.html" style="text-decoration: none; color: inherit;">편집하기 →</a></div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script>
+        const colorDataset = [
+            { color: [0, 0, 0], emotion: 'Sophistication' },
+            { color: [105, 105, 105], emotion: 'Neutral' },
+            { color: [128, 128, 128], emotion: 'Neutral' },
+            { color: [211, 211, 211], emotion: 'Calm' },
+            { color: [255, 255, 255], emotion: 'Purity' },
+            { color: [139, 69, 19], emotion: 'Earthy' },
+            { color: [210, 180, 140], emotion: 'Warmth' },
+            { color: [245, 245, 220], emotion: 'Softness' },
+            { color: [255, 0, 0], emotion: 'Passion' },
+            { color: [139, 0, 0], emotion: 'Intensity' },
+            { color: [240, 128, 128], emotion: 'Gentleness' },
+            { color: [255, 165, 0], emotion: 'Excitement' },
+            { color: [255, 160, 122], emotion: 'Vibrancy' },
+            { color: [233, 150, 122], emotion: 'Warmth' },
+            { color: [255, 255, 0], emotion: 'Happiness' },
+            { color: [255, 255, 224], emotion: 'Delight' },
+            { color: [154, 205, 50], emotion: 'Freshness' },
+            { color: [107, 142, 35], emotion: 'Resilience' },
+            { color: [0, 128, 0], emotion: 'Growth' },
+            { color: [0, 100, 0], emotion: 'Stability' },
+            { color: [128, 128, 0], emotion: 'Conservatism' },
+            { color: [0, 0, 255], emotion: 'Trust' },
+            { color: [173, 216, 230], emotion: 'Peace' },
+            { color: [65, 105, 225], emotion: 'Royalty' },
+            { color: [100, 149, 237], emotion: 'Calmness' },
+            { color: [0, 0, 128], emotion: 'Authority' },
+            { color: [0, 0, 139], emotion: 'Depth' },
+            { color: [138, 43, 226], emotion: 'Creativity' },
+            { color: [147, 112, 219], emotion: 'Imagination' },
+            { color: [75, 0, 130], emotion: 'Mystery' },
+            { color: [255, 192, 203], emotion: 'Love' },
+            { color: [255, 182, 193], emotion: 'Tenderness' },
+            { color: [219, 112, 147], emotion: 'Affection' }
+        ];
+
+        const emotions = Array.from(new Set(colorDataset.map(d => d.emotion)));
+        const emotionToIndex = Object.fromEntries(emotions.map((e, i) => [e, i]));
+
+        function extractColors(image) {
+            const colorThief = new ColorThief();
+            const dominantColor = colorThief.getColor(image);
+            const palette = colorThief.getPalette(image, 5);
+
+            displayColors(dominantColor, palette);
+        }
+
+        function displayColors(dominantColor, palette) {
+            const dominantColorBlock = document.getElementById('dominantColorBlock');
+            dominantColorBlock.style.backgroundColor = `rgb(${dominantColor.join(',')})`;
+
+            const topEmotions = predictTopEmotions(dominantColor);
+            displayTopEmotions(topEmotions, `rgb(${dominantColor.join(',')})`);
+
+            const paletteBlocks = document.getElementById('paletteBlocks');
+            paletteBlocks.innerHTML = '';
+            palette.forEach(color => {
+                const colorBlock = document.createElement('div');
+                colorBlock.className = 'color-block';
+                colorBlock.style.backgroundColor = `rgb(${color.join(',')})`;
+                paletteBlocks.appendChild(colorBlock);
+            });
+        }
+
+        function displayTopEmotions(emotions, color) {
+            for (let i = 0; i < emotions.length; i++) {
+                const emotionBlock = document.getElementById(`emotionBlock${i + 1}`);
+                const emotionLabel = document.getElementById(`emotionLabel${i + 1}`);
+                emotionBlock.style.backgroundColor = color;
+                emotionLabel.textContent = `Emotion: ${emotions[i].emotion} (Confidence: ${(emotions[i].confidence * 100).toFixed(2)}%)`;
+            }
+        }
+
+        function createModel() {
+            const model = tf.sequential();
+            model.add(tf.layers.dense({ units: 16, activation: 'relu', inputShape: [3] }));
+            model.add(tf.layers.dense({ units: 16, activation: 'relu' }));
+            model.add(tf.layers.dense({ units: emotions.length, activation: 'softmax' }));
+            model.compile({ optimizer: 'adam', loss: 'sparseCategoricalCrossentropy', metrics: ['accuracy'] });
+            return model;
+        }
+
+        const model = createModel();
+
+        const xs = tf.tensor2d(colorDataset.map(d => d.color));
+        const ys = tf.tensor1d(colorDataset.map(d => emotionToIndex[d.emotion]), 'int32');
+
+        async function trainModel() {
+            const history = await model.fit(xs, ys, {
+                epochs: 100,
+                callbacks: {
+                    onEpochEnd: (epoch, logs) => {
+                        console.log(`Epoch ${epoch + 1}: loss=${logs.loss.toFixed(4)}, accuracy=${logs.acc.toFixed(4)}`);
+                    }
+                }
+            });
+            console.log('Training complete');
+            console.log('Final Accuracy:', history.history.acc[history.history.acc.length - 1]);
+        }
+
+        trainModel();
+
+        function predictTopEmotions(color) {
+            const input = tf.tensor2d([color], [1, 3], 'float32');
+            const prediction = model.predict(input).dataSync();
+            const sortedIndices = Array.from(prediction.keys()).sort((a, b) => prediction[b] - prediction[a]);
+            const topIndices = sortedIndices.slice(0, 3);
+
+            return topIndices.map(index => ({
+                emotion: emotions[index],
+                confidence: prediction[index]
+            }));
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const imageSrc = localStorage.getItem('uploadedImage');
+            if (imageSrc) {
+                const img = document.createElement('img');
+                img.src = imageSrc;
+                img.style.maxWidth = '100%';
+                img.style.maxHeight = '100%';
+                img.style.display = 'block';
+                img.style.margin = '0 auto';
+                document.getElementById('imageContainer').appendChild(img);
+                img.onload = function() {
+                    extractColors(img);
+                };
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <link rel="stylesheet" href="uploaded.css">
+</head>
+<body>
+    <div class="div">
+        <div class="div2"><a href="upload-fin.html" style="text-decoration: none; color: inherit;"> 분석하기 → </a></div>
+        <div class="div4">
+            <select id="small-subject" class="dropdown">
+                <option value="">소분류</option>
+            </select>
+        </div>
+        <div class="div5">
+            <select id="medium-subject" class="dropdown">
+                <option value="">중분류</option>
+            </select>
+        </div>
+        <div class="div6">
+            <select id="main-subject" class="dropdown">
+                <option value="">대분류</option>
+                <option value="상의">상의</option>
+                <option value="아우터">아우터</option>
+                <option value="하의">하의</option>
+            </select>
+        </div>
+        <div class="div7" id="imageContainer"></div>
+        <div class="ai-lookbook-editor"> AI Lookbook Editor </div>
+        <div class="title-line"></div>
+        <div class="log-out"> log out </div>
+        <div class="my-page"> my page </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const imageSrc = localStorage.getItem('uploadedImage'); // 로컬 스토리지에서 이미지 데이터 가져오기
+
+            if (imageSrc) {
+                const img = document.createElement('img');
+                img.src = imageSrc; // 이미지 소스 설정
+                document.getElementById('imageContainer').appendChild(img); // 이미지 추가
+            }
+
+            // Dropdown 메뉴 스크립트
+            const mainSubject = document.getElementById('main-subject');
+            const mediumSubject = document.getElementById('medium-subject');
+            const smallSubject = document.getElementById('small-subject');
+
+            const subjects = {
+                상의: {
+                    상의: ["맨투맨/스웨트셔츠", "셔츠/블라우스", "후드 티셔츠", "니트/스웨터", "티셔츠", "스포츠 상의", "기타 상의"]
+                },
+                아우터: {
+                    아우터: ["후드 집업", "재킷", "카디건", "플리스/뽀글이", "코트", "패딩", "베스트", "기타 아우터"]
+                },
+                하의: {
+                    바지: ["데님 팬츠", "코튼 팬츠", "슈트 팬츠/슬랙스", "트레이닝/조거 팬츠", "레깅스", "점프 슈트/오버올", "스포츠 하의", "기타 하의"],
+                    스커트: ["스커트"],
+                    원피스: ["원피스"]
+                }
+            };
+
+            mainSubject.addEventListener('change', function() {
+                const selectedMain = mainSubject.value;
+                mediumSubject.innerHTML = '<option value="">중분류</option>';
+                smallSubject.innerHTML = '<option value="">소분류</option>';
+
+                if (selectedMain) {
+                    const mediumOptions = Object.keys(subjects[selectedMain]);
+                    mediumOptions.forEach(function(subject) {
+                        const option = document.createElement('option');
+                        option.value = subject;
+                        option.textContent = subject;
+                        mediumSubject.appendChild(option);
+                    });
+                }
+            });
+
+            mediumSubject.addEventListener('change', function() {
+                const selectedMain = mainSubject.value;
+                const selectedMedium = mediumSubject.value;
+                smallSubject.innerHTML = '<option value="">소분류</option>';
+
+                if (selectedMain && selectedMedium) {
+                    const smallOptions = subjects[selectedMain][selectedMedium];
+                    smallOptions.forEach(function(subject) {
+                        const option = document.createElement('option');
+                        option.value = subject;
+                        option.textContent = subject;
+                        smallSubject.appendChild(option);
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

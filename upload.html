@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <link rel="stylesheet" href="upload.css">
+</head>
+<body>
+    <div class="div">
+        <div class="rectangle-2"></div>
+        <div class="upload" id="submitButton"> upload </div>
+        <div class="div3" id="imagePreview">drag & drop or click to upload the image</div>
+        <div class="ai-lookbook-editor"> AI Lookbook Editor </div>
+        <div class="title-line"></div>
+        <div class="log-out"> log out </div>
+        <div class="my-page"> my page </div>
+    </div>
+
+    <form id="uploadForm">
+        <input type="file" id="imageInput" style="display:none;">
+    </form>
+
+    <script>
+        // 첫 번째 스크립트
+        document.getElementById('submitButton').addEventListener('click', function(event) {
+            event.preventDefault(); // 기본 동작 막기
+
+            const fileInput = document.getElementById('imageInput');
+            const file = fileInput.files[0]; // 선택된 파일
+
+            if (file) {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    localStorage.setItem('uploadedImage', e.target.result); // 이미지 데이터를 로컬 스토리지에 저장
+                    window.location.href = 'uploaded.html'; // 다음 페이지로 이동
+                };
+
+                reader.readAsDataURL(file); // 파일을 읽어서 Base64로 인코딩
+            }
+        });
+
+        // 두 번째 스크립트
+        const imageInput = document.getElementById('imageInput');
+        const imagePreview = document.getElementById('imagePreview');
+
+        imageInput.addEventListener('change', function(event) {
+            handleFiles(event.target.files);
+        });
+
+        imagePreview.addEventListener('dragover', function(event) {
+            event.preventDefault();
+            imagePreview.classList.add('dragover');
+        });
+
+        imagePreview.addEventListener('dragleave', function(event) {
+            imagePreview.classList.remove('dragover');
+        });
+
+        imagePreview.addEventListener('drop', function(event) {
+            event.preventDefault();
+            imagePreview.classList.remove('dragover');
+            handleFiles(event.dataTransfer.files);
+        });
+
+        imagePreview.addEventListener('click', function() {
+            imageInput.click();
+        });
+
+        function handleFiles(files) {
+            const file = files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    imagePreview.innerHTML = '';
+                    imagePreview.appendChild(img);
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
+</body>
+</html>

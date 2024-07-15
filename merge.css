@@ -1,0 +1,216 @@
+.div,
+.div * {
+    box-sizing: border-box;
+}
+
+.div {
+    background: #f2f2f0;
+    height: 1024px;
+    position: relative;
+}
+
+.div2 {
+    color: #400601;
+    text-align: right;
+    font-family: '-', sans-serif;
+    font-size: 20px;
+    font-weight: 400;
+    text-decoration: underline;
+    position: absolute;
+    left: 1205px;
+    top: 903px;
+    width: 150px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.div-2-span {
+    color: #400601;
+    font-family: 'SpoqaHanSansNeo-Bold', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    text-decoration: underline;
+}
+
+.div3 {
+    color: #400601;
+    text-align: left;
+    font-family: 'SpoqaHanSansNeo-Bold', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    text-decoration: underline;
+    position: absolute;
+    left: 85px;
+    top: 903px;
+    width: 150px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.scroll-container {
+    position: absolute;
+    width: 560px;
+    height: 320px;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#scrollContainerTop {
+    top: 170px;
+    left: 665px;
+}
+
+#scrollContainerBottom {
+    top: 540px;
+    left: 665px;
+}
+
+.scroll-content {
+    display: flex;
+}
+
+.scroll-item {
+    width: 240px;
+    height: 320px;
+    background: #D9D8D7;
+    margin-right: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'SpoqaHanSansNeo-Regular', sans-serif;
+    font-size: 16px;
+    color: #000000;
+}
+
+.scroll-image {
+    width: 240px;
+    height: 320px;
+    object-fit: cover;
+}
+
+.header {
+    position: absolute;
+    inset: 0;
+}
+
+.ai-lookbook-editor {
+    color: #000000;
+    text-align: center;
+    font-family: 'SpoqaHanSansNeo-Bold', sans-serif;
+    font-size: 40px;
+    font-weight: 700;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 500px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.title-line {
+    margin-top: -1px;
+    border-style: solid;
+    border-color: #000000;
+    border-width: 1px 0 0 0;
+    width: 1440px;
+    height: 0px;
+    position: absolute;
+    left: 0px;
+    top: 100px;
+    transform-origin: 0 0;
+    transform: rotate(0deg) scale(1, 1);
+}
+
+.log-out {
+    color: #000000;
+    text-align: center;
+    font-family: 'SpoqaHanSansNeo-Bold', sans-serif;
+    font-size: 25px;
+    font-weight: 700;
+    text-decoration: underline;
+    position: absolute;
+    left: 1105px;
+    top: 0px;
+    width: 120px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.my-page {
+    color: #000000;
+    text-align: center;
+    font-family: 'SpoqaHanSansNeo-Bold', sans-serif;
+    font-size: 25px;
+    font-weight: 700;
+    text-decoration: underline;
+    position: absolute;
+    left: 1270px;
+    top: 0px;
+    width: 120px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.div5 {
+    background: #d9d8d7;
+    width: 400px;
+    height: 600px;
+    position: absolute;
+    left: 100px;
+    top: 170px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* 넘치는 이미지 숨기기 */
+}
+
+.div5 img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; /* 이미지 비율을 유지하며 div에 맞게 조절 */
+}
+
+.div6 {
+    color: #400601;
+    text-align: left;
+    font-family: 'SpoqaHanSansNeo-Regular', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    position: absolute;
+    left: 560px;
+    top: 170px;
+    width: 90px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.div7 {
+    color: #400601;
+    text-align: left;
+    font-family: 'SpoqaHanSansNeo-Regular', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    position: absolute;
+    left: 560px;
+    top: 540px;
+    width: 90px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}

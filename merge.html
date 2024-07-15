@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <link rel="stylesheet" href="merge.css">
+</head>
+<body>
+    <div class="div">
+        <div class="div2">
+            <span><span class="div-2-span"><a href="fin.html" style="text-decoration: none; color: inherit;"> 다음 → </a></span></span>
+        </div>
+        <div class="div3"><a href="javascript:history.back();" style="text-decoration: none; color: inherit;"> ← 이전 </a></div>
+        <div class="scroll-container" id="scrollContainerTop">
+            <div class="scroll-content">
+                <div class="scroll-item"><img src="bg/bg1.png" class="scroll-image" onclick="combineImages(this)"></div>
+                <div class="scroll-item"><img src="bg/bg2.png" class="scroll-image" onclick="combineImages(this)"></div>
+                <div class="scroll-item"><img src="bg/bg3.png" class="scroll-image" onclick="combineImages(this)"></div>
+                <div class="scroll-item"><img src="bg/bg4.png" class="scroll-image" onclick="combineImages(this)"></div>
+            </div>
+        </div>
+        <div class="scroll-container" id="scrollContainerBottom">
+            <div class="scroll-content">
+                <div class="scroll-item"><img src="bg/bg5.png" class="scroll-image" onclick="combineImages(this)"></div>
+                <div class="scroll-item"><img src="bg/bg6.png" class="scroll-image" onclick="combineImages(this)"></div>
+                <div class="scroll-item"><img src="bg/bg7.png" class="scroll-image" onclick="combineImages(this)"></div>
+                <div class="scroll-item"><img src="bg/bg8.png" class="scroll-image" onclick="combineImages(this)"></div>
+            </div>
+        </div>
+        <div class="ai-lookbook-editor"> AI Lookbook Editor </div>
+        <div class="title-line"></div>
+        <div class="log-out"> log out </div>
+        <div class="my-page"> my page </div>
+        <div class="div5" id="imageContainer" style="width: 400px; height: 600px;"></div> <!-- 고정된 크기 설정 -->
+        <div class="div6"> 추천 배경 </div>
+        <div class="div7"> 더 많은 배경 </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const imageSrc = localStorage.getItem('uploadedImage'); // 로컬 스토리지에서 이미지 데이터 가져오기
+
+            if (imageSrc) {
+                const img = document.createElement('img');
+                img.src = imageSrc; // 이미지 소스 설정
+                img.style.maxWidth = '100%';
+                img.style.maxHeight = '100%';
+                img.style.display = 'block';
+                img.style.margin = '0 auto'; // 가운데 정렬
+                document.getElementById('imageContainer').appendChild(img); // 이미지 추가
+            }
+        });
+
+        function combineImages(clickedImage) {
+            const uploadedImageSrc = localStorage.getItem('uploadedImage');
+            const container = document.getElementById('imageContainer');
+            const containerWidth = container.clientWidth;
+            const containerHeight = container.clientHeight;
+
+            if (uploadedImageSrc) {
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+                const uploadedImage = new Image();
+                const clickedImageSrc = clickedImage.src;
+
+                uploadedImage.src = uploadedImageSrc;
+                uploadedImage.onload = function() {
+                    const newImage = new Image();
+                    newImage.src = clickedImageSrc;
+                    newImage.onload = function() {
+                        canvas.width = containerWidth;
+                        canvas.height = containerHeight;
+
+                        // 클릭한 이미지를 비율을 유지하며 캔버스에 맞춤
+                        const newImageAspectRatio = newImage.width / newImage.height;
+                        let newImageWidth, newImageHeight, newImageX, newImageY;
+                        if (newImageAspectRatio > canvas.width / canvas.height) {
+                            newImageWidth = canvas.width;
+                            newImageHeight = canvas.width / newImageAspectRatio;
+                            newImageX = 0;
+                            newImageY = (canvas.height - newImageHeight) / 2;
+                        } else {
+                            newImageHeight = canvas.height;
+                            newImageWidth = canvas.height * newImageAspectRatio;
+                            newImageX = (canvas.width - newImageWidth) / 2;
+                            newImageY = 0;
+                        }
+                        context.drawImage(newImage, newImageX, newImageY, newImageWidth, newImageHeight);
+
+                        // 로컬 스토리지에 저장된 이미지를 비율을 유지하며 캔버스에 맞춤
+                        const uploadedImageAspectRatio = uploadedImage.width / uploadedImage.height;
+                        let uploadedImageWidth, uploadedImageHeight, uploadedImageX, uploadedImageY;
+                        if (uploadedImageAspectRatio > canvas.width / canvas.height) {
+                            uploadedImageWidth = canvas.width;
+                            uploadedImageHeight = canvas.width / uploadedImageAspectRatio;
+                            uploadedImageX = 0;
+                            uploadedImageY = (canvas.height - uploadedImageHeight) / 2;
+                        } else {
+                            uploadedImageHeight = canvas.height;
+                            uploadedImageWidth = canvas.height * uploadedImageAspectRatio;
+                            uploadedImageX = (canvas.width - uploadedImageWidth) / 2;
+                            uploadedImageY = 0;
+                        }
+                        context.drawImage(uploadedImage, uploadedImageX, uploadedImageY, uploadedImageWidth, uploadedImageHeight);
+
+                        // 합성된 이미지를 로컬 스토리지에 저장
+                        const combinedImageSrc = canvas.toDataURL('image/png');
+                        localStorage.setItem('uploadedImage', combinedImageSrc);
+
+                        // 합성된 이미지를 화면에 표시
+                        const combinedImg = document.createElement('img');
+                        combinedImg.src = combinedImageSrc;
+                        combinedImg.style.maxWidth = '100%';
+                        combinedImg.style.maxHeight = '100%';
+                        combinedImg.style.display = 'block';
+                        combinedImg.style.margin = '0 auto';
+
+                        container.innerHTML = '';
+                        container.appendChild(combinedImg);
+                    };
+                };
+            }
+        }
+    </script>
+</body>
+</html>

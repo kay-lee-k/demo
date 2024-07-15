@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <link rel="stylesheet" href="fin.css">
+</head>
+<body>
+    <div class="div">
+        <div class="div2" id="saveImage"> 저장하기 </div> <!-- id 추가 -->
+        <div class="div3"> 처음으로 돌아가기 </div>
+        <div class="div4" id="imageContainer"></div> <!-- id 추가 -->
+        <div class="ai-lookbook-editor"> AI Lookbook Editor </div>
+        <div class="title-line"></div>
+        <div class="log-out"> log out </div>
+        <div class="my-page"> my page </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const imageSrc = localStorage.getItem('uploadedImage'); // 로컬 스토리지에서 이미지 데이터 가져오기
+
+            if (imageSrc) {
+                const img = document.createElement('img');
+                img.src = imageSrc; // 이미지 소스 설정
+                img.style.maxWidth = '100%';
+                img.style.maxHeight = '100%';
+                img.style.display = 'block';
+                img.style.margin = '0 auto'; // 가운데 정렬
+                document.getElementById('imageContainer').appendChild(img); // 이미지 추가
+            }
+
+            document.getElementById('saveImage').addEventListener('click', function() {
+                if (imageSrc) {
+                    const link = document.createElement('a');
+                    link.href = imageSrc;
+                    link.download = 'image.png';
+                    link.click();
+                } else {
+                    alert('저장된 이미지가 없습니다.');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
